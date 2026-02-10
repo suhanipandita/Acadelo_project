@@ -9,3 +9,5 @@ env/
 venv/
 .vscode/
 .idea/
+ML_literature_review_And_Diagrams.pages
+.streamlit/secrets.toml
