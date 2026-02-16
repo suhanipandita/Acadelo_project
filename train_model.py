@@ -11,7 +11,14 @@ print("Loading processed data...")
 df = pd.read_csv('processed_data.csv')
 
 # 2. Define Features (X) and Target (Y)
-features = ['clicks_total', 'days_active', 'gap_before_deadline']
+features = [
+    'clicks_total', 
+    'days_active', 
+    'gap_before_deadline', 
+    'material_diversity', 
+    'cramming_ratio', 
+    'clicks_last_7d'
+]
 X = df[features]
 y = df['days_early']
 
