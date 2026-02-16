@@ -226,21 +226,54 @@ with tab1:
                 "clicks_last_7d": clicks_recent
             }
             
-            # Save
+            # Save to Supabase
             if save_single_student(supabase, row_data):
-                st.success(f"Saved **{s_id}**!")
+                st.success(f"Saved **{s_id}** successfully!")
                 
-                # Live Prediction check
-                input_df = pd.DataFrame([row_data]).drop(columns=['student_id'])
-                # Ensure columns order matches model
-                input_df = input_df[['clicks_total', 'days_active', 'gap_before_deadline', 
-                                   'material_diversity', 'cramming_ratio', 'clicks_last_7d']]
+                # --- PREDICTION & EXPLANATION ---
                 
+                # 1. Prepare Input for Model
+                # Create a DataFrame with the EXACT column order the model expects
+                feature_names = ['clicks_total', 'days_active', 'gap_before_deadline', 
+                               'material_diversity', 'cramming_ratio', 'clicks_last_7d']
+                
+                input_df = pd.DataFrame([row_data])
+                # Filter to keep only feature columns (drop student_id)
+                input_df = input_df[feature_names]
+                
+                # 2. Make Prediction
                 pred = model.predict(input_df)[0]
-                if pred < 0:
-                    st.error(f"Predicted Result: {abs(pred):.1f} Days Late")
-                else:
-                    st.success(f"Predicted Result: {pred:.1f} Days Early")
+                
+                st.write("---")
+                col_res, col_why = st.columns([1, 2])
+                
+                with col_res:
+                    st.subheader("Prediction")
+                    if pred < 0:
+                        st.error(f"⚠️ **{abs(pred):.1f} Days Late**")
+                        st.caption("High Risk of Procrastination")
+                    else:
+                        st.success(f"✅ **{pred:.1f} Days Early**")
+                        st.caption("On Track")
+
+                with col_why:
+                    st.subheader("💡 Why this result?")
+                    
+                    # 3. SHAP Explanation
+                    import shap
+                    
+                    # Initialize the explainer with your model
+                    # (Ideally, initialize this once at the top of app.py to save time, but here is fine for now)
+                    explainer = shap.TreeExplainer(model)
+                    shap_values = explainer(input_df) # Calculate SHAP values for this specific student
+                    
+                    # Visualize
+                    # We use a waterfall plot to show how features push the prediction
+                    fig_shap, ax = plt.subplots(figsize=(8, 5))
+                    shap.plots.waterfall(shap_values[0], show=False) # [0] because we only have 1 row
+                    st.pyplot(fig_shap)
+                    
+                    st.info("**How to read this:** Red bars push the prediction lower (Late). Blue bars push it higher (Early).")
 
 # --- TAB 2: TEAM FORMATION ---
 with tab2:

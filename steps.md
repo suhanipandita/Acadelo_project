@@ -25,3 +25,11 @@ Insert selected number of records in bulk in the database.
 
 - Model Accuracy (RMSE): 7.9114 days
 - R2 Score: 0.3629
+
+## Version 3
+### Features:
+- SHAP (SHapley Additive exPlanations) : Explainable AI model added to reason as to which factor(clicks/cramming ratio) contributes to late submission.
+    - Base Value: The average prediction for all students (e.g., 0.5 days early).
+    - Red Bars: Features dragging the student down (e.g., gap_before_deadline = 10 might push the score down by -2.0).
+    - Blue Bars: Features helping the student (e.g., clicks_total = 500 might push the score up by +1.5).
+    - Final Value: The sum of everything, which equals the predicted days early/late. 
