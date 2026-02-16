@@ -264,7 +264,7 @@ with tab2:
                 classroom[features] = classroom[features].fillna(0)
                 
                 classroom['predicted_early'] = model.predict(classroom[features])
-                classroom['risk_score'] = classroom['predicted_early'] * -1 
+                classroom['risk_score'] = classroom['predicted_early'] * -1 # Invert so High = Risky
                 
                 # Calibration Hack (Override model if strictly necessary)
                 classroom.loc[classroom['clicks_total'] < 30, 'risk_score'] = 5.0
@@ -279,6 +279,8 @@ with tab2:
                 for i, row in sorted_students.iterrows():
                     cycle = i // num_teams
                     idx = i % num_teams
+                    
+                    # Snake Draft Logic
                     if cycle % 2 == 1:
                         team_idx = (num_teams - 1) - idx
                     else:
@@ -312,12 +314,14 @@ with tab2:
                     st.markdown("### 🔴 Random")
                     fig1, ax1 = plt.subplots()
                     ax1.plot(random_risk.values, marker='o', color='red', linestyle='--')
+                    ax1.set_ylabel("Total Risk Score")
                     ax1.set_title(f"Variance: {random_risk.var():.2f}")
                     st.pyplot(fig1)
                 with col2:
                     st.markdown("### 🟢 Acadelo")
                     fig2, ax2 = plt.subplots()
                     ax2.plot(smart_risks, marker='o', color='green')
+                    ax2.set_ylabel("Total Risk Score")
                     ax2.set_title(f"Variance: {np.var(smart_risks):.2f}")
                     st.pyplot(fig2)
 
