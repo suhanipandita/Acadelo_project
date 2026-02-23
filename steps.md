@@ -33,3 +33,12 @@ Insert selected number of records in bulk in the database.
     - Red Bars: Features dragging the student down (e.g., gap_before_deadline = 10 might push the score down by -2.0).
     - Blue Bars: Features helping the student (e.g., clicks_total = 500 might push the score up by +1.5).
     - Final Value: The sum of everything, which equals the predicted days early/late. 
+
+## Version 4
+### Features:
+- Filtered Out Quizzes (Data Cleaning)
+- Optimized XGBoost (Hyperparameter Tuning)
+- Clicks that happen AFTER the student submits their assignment are ignored to remove outliers.
+
+- Model Accuracy (RMSE): 2.1103 days
+- R2 Score: 0.5702
