@@ -45,7 +45,7 @@ r2 = r2_score(y_test, predictions)
 
 print(f"\n--- Model Results ---")
 print(f"RMSE: {rmse:.2f} days")
-print(f"🏆 R2 Score: {r2:.2f} (Target > 0.60 achieved!)")
+print(f"🏆 R2 Score: {r2:.2f}")
 
 # 6. Save
 pickle.dump(model, open("procrastination_model.pkl", "wb"))
