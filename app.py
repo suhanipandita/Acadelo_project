@@ -305,8 +305,20 @@ with tab3:
                 
                 models_bench = {
                     "Linear Regression": LinearRegression(),
-                    "Random Forest": RandomForestRegressor(n_estimators=100, max_depth=5, random_state=42),
-                    "XGBoost": xgb.XGBRegressor(objective='reg:squarederror', n_estimators=100, max_depth=5, random_state=42)
+                    "Random Forest": RandomForestRegressor(
+                        n_estimators=100, 
+                        max_depth=4,  # Standard depth
+                        random_state=42
+                    ),
+                    "XGBoost": xgb.XGBRegressor(
+                        objective='reg:squarederror', 
+                        n_estimators=200,         # More trees
+                        learning_rate=0.05,       # Slower, more careful learning
+                        max_depth=5,              # Slightly deeper to find complex patterns
+                        subsample=0.8,            # Prevents overfitting to noise
+                        colsample_bytree=0.8,
+                        random_state=42
+                    )
                 }
                 
                 results_list = []

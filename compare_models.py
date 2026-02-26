@@ -52,7 +52,7 @@ models = {
 # 4. Train and Evaluate
 results = []
 
-print("\n🥊 DING DING DING! Starting Model Comparison...\n")
+print("\nStarting Model Comparison...\n")
 
 for name, model in models.items():
     print(f"Training {name}...")
